@@ -51,17 +51,18 @@ public class MenuItem {
     }
     
     public static String createMenuItem(String menuItemName, String menuItemDescription, double menuItemPrice) {
-    	String query = "INSERT INTO menu_items (menuitemname, menuitemdescription, menuitemprice) VALUES (?, ?, ?)";
+    	String query = "INSERT INTO menu_items (menuitemsid, menuitemname, menuitemdescription, menuitemprice) VALUES (?, ?, ?, ?)";
     	try (Connection connection = Connect.getInstance().getConnection();
     	  PreparedStatement ps = connection.prepareStatement(query)){
-    	  ps.setString(1,menuItemName);
-    	  ps.setString(2,menuItemDescription);
-    	  ps.setDouble(3,menuItemPrice);
+    	  ps.setInt(1,0);
+    	  ps.setString(2,menuItemName);
+    	  ps.setString(3,menuItemDescription);
+    	  ps.setDouble(4,menuItemPrice);
     	  ps.executeUpdate();
-    	  return "Create Sucess";
+    	  return "Create MenuItem Sucess";
     	} catch (SQLException e) {
     	  e.printStackTrace();
-    	  return "Create Failed";
+    	  return "Create MenuItem Failed";
     	}
 	
     }
@@ -75,10 +76,10 @@ public class MenuItem {
             preparedStatement.setDouble(3, menuItemPrice);
             preparedStatement.setInt(4, menuItemId);
             preparedStatement.executeUpdate();
-            return "Update Sucess";
+            return "Update MenuItem Sucess";
         } catch (SQLException e) {
             e.printStackTrace();
-            return "Update Failed";
+            return "Update MenuItem Failed";
         }
    	
    }

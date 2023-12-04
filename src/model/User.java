@@ -152,6 +152,21 @@ public class User {
         return userlist;
     }
     
-    
+    public static String AuthenticateUser (String useremail, String userpassword) {
+        try {
+            Connection connection = Connect.getInstance().getConnection();
+            String query = "SELECT * FROM users WHERE useremail = ? AND userpassword = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, useremail);
+            preparedStatement.setString(2, userpassword);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            return "Authenticate User Sucess";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Authenticate User Failed";
+        }
+    }
     
 }

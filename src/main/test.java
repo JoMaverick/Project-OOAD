@@ -34,13 +34,15 @@ public class test {
 		
 //		User.updateUser(1, "reynard", "pemain", "rey@abc.com", "akugalau");
 		
-		ArrayList<User> mn = User.getAllUsers();
-		for (User user : mn) {
-			System.out.println(user.getUserName());
-			System.out.println(user.getUserRole());
-			System.out.println(user.getUserEmail());
-			System.out.println(user.getUserPassword());
-		}
+//		ArrayList<User> mn = User.getAllUsers();
+//		for (User user : mn) {
+//			System.out.println(user.getUserName());
+//			System.out.println(user.getUserRole());
+//			System.out.println(user.getUserEmail());
+//			System.out.println(user.getUserPassword());
+//		}
+		
+//		System.out.println(User.AuthenticateUser("rey@abc.com", "akugalau"));
 
 	}
 

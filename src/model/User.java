@@ -61,7 +61,7 @@ public class User {
     }
     
     public static void deleteUser(int userId) {
-    	String query = "DELETE FROM users WHERE userid = ?";
+    	String query = "DELETE FROM users WHERE user_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, userId);
@@ -73,18 +73,18 @@ public class User {
     
     public static ArrayList<User> getUserById(int userId) {
         ArrayList<User> userList = new ArrayList<>();
-        String query = "SELECT * FROM users WHERE userid = ?";
+        String query = "SELECT * FROM users WHERE user_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
              PreparedStatement ps = connection.prepareStatement(query)){
             	 ps.setInt(1, userId);
             	 ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {
-            	int id = resultSet.getInt("userid");
-                String name = resultSet.getString("username");
-                String email = resultSet.getString("useremail");
-                String pass = resultSet.getString("userpassword");
-                String role = resultSet.getString("userrole");
+            	int id = resultSet.getInt("user_id");
+                String name = resultSet.getString("user_name");
+                String email = resultSet.getString("user_email");
+                String pass = resultSet.getString("user_password");
+                String role = resultSet.getString("user_role");
 
                 User users = new User(id, email, name, pass, role);
                 userList.add(users);
@@ -96,7 +96,7 @@ public class User {
     }
     
     public static String createUser(String username, String userrole, String useremail, String userpassword) {
-    	String query = "INSERT INTO users (userid, username, userrole, useremail, userpassword) VALUES (?, ?, ?, ?,?)";
+    	String query = "INSERT INTO users (user_id, user_name, user_role, user_email, user_password) VALUES (?, ?, ?, ?,?)";
     	try (Connection connection = Connect.getInstance().getConnection();
     	  PreparedStatement ps = connection.prepareStatement(query)){
     	  ps.setInt(1,0);
@@ -114,7 +114,7 @@ public class User {
     }
     
     public static void updateUser(int userid, String username, String userrole, String useremail, String userpassword) {
-    	String query = "UPDATE users SET username = ?, userrole = ?, useremail = ?, userpassword = ? WHERE  userid= ?";
+    	String query = "UPDATE users SET user_name = ?, user_role = ?, user_email = ?, user_password = ? WHERE  user_id= ?";
         try (Connection connection = Connect.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, username);
@@ -137,11 +137,11 @@ public class User {
              ResultSet resultSet = statement.executeQuery(query)) {
             
             while (resultSet.next()) {
-            	int id = resultSet.getInt("userid");
-                String username = resultSet.getString("username");
-                String useremail = resultSet.getString("useremail");
-                String userpassword = resultSet.getString("userpassword");
-                String userrole = resultSet.getString("userrole");
+            	int id = resultSet.getInt("user_id");
+                String username = resultSet.getString("user_name");
+                String useremail = resultSet.getString("user_email");
+                String userpassword = resultSet.getString("user_password");
+                String userrole = resultSet.getString("user_role");
 
                 User user = new User(id, username, useremail, userpassword, userrole);
                 userlist.add(user);
@@ -155,7 +155,7 @@ public class User {
     public static String AuthenticateUser (String useremail, String userpassword) {
         try {
             Connection connection = Connect.getInstance().getConnection();
-            String query = "SELECT * FROM users WHERE useremail = ? AND userpassword = ?";
+            String query = "SELECT * FROM users WHERE user_email = ? AND user_password = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, useremail);
             preparedStatement.setString(2, userpassword);

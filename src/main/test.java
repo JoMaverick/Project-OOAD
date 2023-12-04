@@ -42,7 +42,8 @@ public class test {
 //			System.out.println(user.getUserPassword());
 //		}
 		
-//		System.out.println(User.AuthenticateUser("rey@abc.com", "akugalau"));
+//		System.out.println(User.AuthenticateUser("rey@abc.com", "akugalau"));3
+		
 
 	}
 

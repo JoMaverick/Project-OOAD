@@ -51,7 +51,7 @@ public class MenuItem {
     }
     
     public static String createMenuItem(String menuItemName, String menuItemDescription, double menuItemPrice) {
-    	String query = "INSERT INTO menu_items (menuitemsid, menuitemname, menuitemdescription, menuitemprice) VALUES (?, ?, ?, ?)";
+    	String query = "INSERT INTO menu_items (menuitem_id, menuitem_name, menuitem_description, menuitem_price) VALUES (?, ?, ?, ?)";
     	try (Connection connection = Connect.getInstance().getConnection();
     	  PreparedStatement ps = connection.prepareStatement(query)){
     	  ps.setInt(1,0);
@@ -68,7 +68,7 @@ public class MenuItem {
     }
     
     public static String updateMenuItem(int menuItemId, String menuItemName, String menuItemDescription, double menuItemPrice) {
-    	String query = "UPDATE menu_items SET menuitemname = ?, menuitemdescription = ?, menuitemprice = ? WHERE menuitemsid = ?";
+    	String query = "UPDATE menu_items SET menuitem_name = ?, menuitem_description = ?, menuitem_price = ? WHERE menuitem_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, menuItemName);
@@ -85,7 +85,7 @@ public class MenuItem {
    }
     
     public static void deleteMenuItem(int menuItemId) {
-    	String query = "DELETE FROM menu_items WHERE menuitemsid = ?";
+    	String query = "DELETE FROM menu_items WHERE menuitem_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, menuItemId);
@@ -103,10 +103,10 @@ public class MenuItem {
              ResultSet resultSet = statement.executeQuery(query)) {
             
             while (resultSet.next()) {
-            	int id = resultSet.getInt("menuitemsid");
-                String name = resultSet.getString("menuItemName");
-                String desc = resultSet.getString("menuitemdescription");
-                double price = resultSet.getDouble("menuitemprice");
+            	int id = resultSet.getInt("menuitem_id");
+                String name = resultSet.getString("menuitem_name");
+                String desc = resultSet.getString("menuitem_description");
+                double price = resultSet.getDouble("menuitem_price");
 
                 MenuItem menuitems = new MenuItem(id, name, desc, price);
                 menuitemlist.add(menuitems);
@@ -119,17 +119,17 @@ public class MenuItem {
     
     public static ArrayList<MenuItem> getMenuItemById(int menuItemsId) {
         ArrayList<MenuItem> menuitemlist = new ArrayList<>();
-        String query = "SELECT * FROM menu_items WHERE menuitemsid = ?";
+        String query = "SELECT * FROM menu_items WHERE menuitem_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
              PreparedStatement ps = connection.prepareStatement(query)){
             	 ps.setInt(1, menuItemsId);
             	 ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {
-            	int id = resultSet.getInt("menuitemsid");
-                String name = resultSet.getString("menuItemName");
-                String desc = resultSet.getString("menuitemdescription");
-                double price = resultSet.getDouble("menuitemprice");
+            	int id = resultSet.getInt("menuitem_id");
+                String name = resultSet.getString("menuitem_name");
+                String desc = resultSet.getString("menuitem_description");
+                double price = resultSet.getDouble("menuitem_price");
 
                 MenuItem menuitems = new MenuItem(id, name, desc, price);
                 menuitemlist.add(menuitems);

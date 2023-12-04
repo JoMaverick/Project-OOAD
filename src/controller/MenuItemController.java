@@ -6,12 +6,12 @@ import model.MenuItem;
 
 public class MenuItemController {
 	
-	ArrayList<MenuItem> mi = MenuItem.getAllMenuItems();
+	public static ArrayList<MenuItem> mi = MenuItem.getAllMenuItems();
 	
-	public String createMenuItemController(String menuitemname, String menuitemdesc, double menuitemprice) {
+	public static String createMenuItemController(String menuitemname, String menuitemdesc, double menuitemprice) {
 		
-		if(menuitemname.isBlank()){
-			return "Error: MenuItem name cannot be empty.";
+		if(menuitemname.isBlank() || menuitemdesc.isBlank() || menuitemprice <= 0){
+			return "Error: Field cannot be empty or price cannot be <= 0.";
 		}
 		else if(isMenuItemUnique(menuitemname) == 1) {
 			return "Error: MenuItem name already exist.";
@@ -28,10 +28,10 @@ public class MenuItemController {
 		}
 	}
 	
-	public String updateMenuItemController(int menuitemsid, String menuitemname, String menuitemdesc, double menuitemprice) {
+	public static String updateMenuItemController(int menuitemsid, String menuitemname, String menuitemdesc, double menuitemprice) {
 		
-		if(menuitemname.isBlank()){
-			return "Error: MenuItem name cannot be empty.";
+		if(menuitemname.isBlank() || menuitemdesc.isBlank() || menuitemprice <= 0){
+			return "Error: Field cannot be empty or price cannot be <= 0.";
 		}
 		else if(isMenuItemUnique(menuitemname) == 1) {
 			return "Error: MenuItem name already exist.";
@@ -49,7 +49,7 @@ public class MenuItemController {
 		
 	}
 	
-	public int isMenuItemUnique(String menuitemname) {
+	public static int isMenuItemUnique(String menuitemname) {
 		for (MenuItem menuItem2 : mi) {
 			if(menuitemname == menuItem2.getMenuItemName()) {
 				return 1;
@@ -59,20 +59,20 @@ public class MenuItemController {
 		
 	}
 	
-	public void deleteMenuItemController(int menuitemid) {
+	public static void deleteMenuItemController(int menuitemid) {
 		MenuItem.deleteMenuItem(menuitemid);
 	}
 	
-	public void getMenuItemById(int menuitemid) {
-		MenuItem.getMenuItemById(menuitemid);
+	public static ArrayList<MenuItem> getMenuItemByIdController(int menuitemid) {
+		return MenuItem.getMenuItemById(menuitemid);
 	}
 	
-	public void getAllMenuItem() {
-		MenuItem.getAllMenuItems();
+	public static ArrayList<MenuItem> getAllMenuItemController() {
+		return MenuItem.getAllMenuItems();
 		
 	}
 	
-	public int morethanTen(String menuitemdesc) {
+	public static int morethanTen(String menuitemdesc) {
 		if(menuitemdesc.length() < 10 ) {
 				return 1;
 		}
@@ -80,7 +80,7 @@ public class MenuItemController {
 	}
 
 	
-	public int priceValidation(double menuitemprice) {
+	public static int priceValidation(double menuitemprice) {
 		if(menuitemprice < 2.5) {
 			return 1;
 	}

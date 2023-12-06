@@ -35,7 +35,7 @@ public class UserController {
 			return "Error: Email is already registered";
 		}
 		else if(isUserRoleValid(userrole) == 1) {
-			return "Error: Confirm Password entered is not the same as Password";
+			return "Error: Role must be Admin || Chef || Cashier || Customer";
 		}
 		else {
 			User.updateUser(userid, username, userrole, useremail, userpassword);
@@ -47,7 +47,7 @@ public class UserController {
 		User.deleteUser(userid);
 	}
 	
-	public static String AuthenticateUser(String useremail, String userpass) {
+	public static String AuthenticateUserController(String useremail, String userpass) {
 		if(useremail.isBlank() || userpass.isBlank()) {
 			return "Error: Field cannot be empty";
 		}
@@ -78,21 +78,19 @@ public class UserController {
 		return 1;
 	}
 
-	//masi salah
+	
 	public static int isUserEmailUnique(String useremail) {
 		for (User users : userlist) {
-			System.out.println(users.getUserEmail());
 			if(useremail.equalsIgnoreCase(users.getUserEmail())) {
 				return 1;
 			}
 		}
-		System.out.println(useremail);
 		return 0;
 		
 	}
 	
 	public static int isUserRoleValid(String role) {
-		if(!role.equals("Admin") || !role.equals("Chef") || !role.equals("Cashier") || !role.equals("Customer") ) {
+		if(!role.equals("Admin") && !role.equals("Chef") && !role.equals("Cashier") && !role.equals("Customer") ) {
 			return 1;
 		}
 		else {

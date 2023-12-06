@@ -28,7 +28,7 @@ public class test {
 //		}
 //		System.out.println(UserController.createUserController("lili", "lili@abc.com", "pass123", "pass123"));
 //		System.out.println(UserController.createUserController("lulu", "lili@abc.com", "pass123", "pass123"));
-//		ArrayList<User> mn = User.getUserById(0);
+//		ArrayList<User> mn = UserController.getUserByIdController(1);
 //		for (User user : mn) {
 //			System.out.println(user.getUserName());
 //			System.out.println(user.getUserRole());
@@ -36,9 +36,9 @@ public class test {
 //			System.out.println(user.getUserPassword());
 //		}
 		
-//		User.updateUser(1, "reynard", "pemain", "rey@abc.com", "akugalau");
+//		System.out.println(UserController.updateUserController(1, "Daniel", "dan@abc.com", "pass1", "Admin"));
 		
-//		ArrayList<User> mn = User.getAllUsers();
+//		ArrayList<User> mn = UserController.getAllUsersController();
 //		for (User user : mn) {
 //			System.out.println(user.getUserName());
 //			System.out.println(user.getUserRole());
@@ -46,7 +46,7 @@ public class test {
 //			System.out.println(user.getUserPassword());
 //		}
 		
-//		System.out.println(User.AuthenticateUser("rey@abc.com", "akugalau"));3
+		// System.out.println(UserController.AuthenticateUserController("dan@abc.com", "pass1"));
 		
 
 	}

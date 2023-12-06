@@ -86,7 +86,7 @@ public class User {
                 String pass = resultSet.getString("user_password");
                 String role = resultSet.getString("user_role");
 
-                User users = new User(id, email, name, pass, role);
+                User users = new User(id, role, name, email, pass);
                 userList.add(users);
             }
         } catch (SQLException e) {
@@ -143,7 +143,7 @@ public class User {
                 String userpassword = resultSet.getString("user_password");
                 String userrole = resultSet.getString("user_role");
 
-                User user = new User(id, username, useremail, userpassword, userrole);
+                User user = new User(id, userrole, username , useremail, userpassword);
                 userlist.add(user);
             }
         } catch (SQLException e) {

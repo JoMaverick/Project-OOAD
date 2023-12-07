@@ -63,7 +63,7 @@ public class MenuItemController {
 		MenuItem.deleteMenuItem(menuitemid);
 	}
 	
-	public static ArrayList<MenuItem> getMenuItemByIdController(int menuitemid) {
+	public static MenuItem getMenuItemByIdController(int menuitemid) {
 		return MenuItem.getMenuItemById(menuitemid);
 	}
 	

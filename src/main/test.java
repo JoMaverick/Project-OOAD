@@ -20,22 +20,18 @@ public class test {
 //			System.out.println(menuItem.getMenuItemDescription());
 //			System.out.println(menuItem.getMenuItemPrice());
 //		}
-//		ArrayList<MenuItem> mn = MenuItemController.getMenuItemByIdController(1);
-//		for (MenuItem menuItem : mn) {
-//			System.out.println(menuItem.getMenuItemName());
-//			System.out.println(menuItem.getMenuItemDescription());
-//			System.out.println(menuItem.getMenuItemPrice());
-//		}
+//		MenuItem mn = MenuItemController.getMenuItemByIdController(1);
+//			System.out.println(mn.getMenuItemName());
+//			System.out.println(mn.getMenuItemDescription());
+//			System.out.println(mn.getMenuItemPrice());
 //		System.out.println(UserController.createUserController("lili", "lili@abc.com", "pass123", "pass123"));
 //		System.out.println(UserController.createUserController("lulu", "lili@abc.com", "pass123", "pass123"));
-//		ArrayList<User> mn = UserController.getUserByIdController(1);
-//		for (User user : mn) {
-//			System.out.println(user.getUserName());
-//			System.out.println(user.getUserRole());
-//			System.out.println(user.getUserEmail());
-//			System.out.println(user.getUserPassword());
-//		}
-		
+//		User us = UserController.getUserByIdController(1);
+//			System.out.println(us.getUserName());
+//			System.out.println(us.getUserRole());
+//			System.out.println(us.getUserEmail());
+//			System.out.println(us.getUserPassword());
+
 //		System.out.println(UserController.updateUserController(1, "Daniel", "dan@abc.com", "pass1", "Admin"));
 		
 //		ArrayList<User> mn = UserController.getAllUsersController();

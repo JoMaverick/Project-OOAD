@@ -63,7 +63,7 @@ public class UserController {
 		return User.getAllUsers();
 	}
 	
-	public static ArrayList<User> getUserByIdController(int userid) {
+	public static User getUserByIdController(int userid) {
 		return User.getUserById(userid);
 	}
 	

@@ -73,8 +73,8 @@ public class User {
         }
     }
 
-    public static ArrayList<User> getUserById(int userId) {
-        ArrayList<User> userList = new ArrayList<>();
+    public static User getUserById(int userId) {
+    	User users;
         String query = "SELECT * FROM users WHERE user_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
                 PreparedStatement ps = connection.prepareStatement(query)) {
@@ -88,13 +88,13 @@ public class User {
                 String pass = resultSet.getString("user_password");
                 String role = resultSet.getString("user_role");
 
-                User users = new User(id, role, name, email, pass);
-                userList.add(users);
+                users = new User(id, role, name, email, pass);
+                return users;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return userList;
+        return null;
     }
 
     public static String createUser(String username, String userrole, String useremail, String userpassword) {

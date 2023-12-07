@@ -37,6 +37,10 @@ public class MenuItem {
         return menuItemPrice;
     }
 
+    public void setMenuItemId(int menuItemId) {
+        this.menuItemId = menuItemId;
+    }
+
     public void setMenuItemName(String menuItemName) {
         this.menuItemName = menuItemName;
     }

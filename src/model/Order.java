@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class Order {
     private List<OrderItem> orderItems;
     private String orderStatus;
     private String orderDate;
-    private int orderTotal;
+    private double orderTotal;
 
     public Order() {
         this.orderItems = new ArrayList<>();
@@ -40,8 +41,12 @@ public class Order {
         return orderDate;
     }
 
-    public int getOrderTotal() {
+    public double getOrderTotal() {
         return orderTotal;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     public void setOrderUser(User orderUser) {
@@ -60,17 +65,17 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public void setOrderTotal(int orderTotal) {
+    public void setOrderTotal(double orderTotal) {
         this.orderTotal = orderTotal;
     }
 
-    public static void createOrder(int orderUserId, List<OrderItem> orderItems, String orderDate) {
+    public static void createOrder(User orderUser, List<OrderItem> orderItems, String orderDate) {
         String query = "INSERT INTO orders (user_id, order_status, order_date) VALUES (?, ?, ?)";
         try (Connection connection = Connect.getInstance().getConnection();
                 PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, orderUserId);
+            ps.setInt(1, orderUser.getUserId());
             ps.setString(2, "Pending");
-            ps.setString(3, orderDate);
+            ps.setDate(3, java.sql.Date.valueOf(orderDate));
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error creating order", e);
@@ -84,12 +89,13 @@ public class Order {
             while (rs.next()) {
                 orderId = rs.getInt("order_id");
             }
+            rs.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error getting order id", e);
         }
 
         for (OrderItem orderItem : orderItems) {
-            OrderItem.createOrderItem(orderId, orderItem.getMenuItemId(), orderItem.getQuantity());
+            OrderItem.createOrderItem(orderId, orderItem.getMenuItem(), orderItem.getQuantity());
         }
     }
 
@@ -104,6 +110,7 @@ public class Order {
                     orderIdExist = true;
                 }
             }
+            rs.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error getting order id", e);
         }
@@ -122,10 +129,123 @@ public class Order {
             }
 
             for (OrderItem orderItem : orderItems) {
-                OrderItem.updateOrderItem(orderId, orderItem.getMenuItemId(), orderItem.getQuantity());
+                OrderItem.updateOrderItem(orderId, orderItem.getMenuItem(), orderItem.getQuantity());
             }
 
             return "Update Order Success";
         }
+    }
+
+    public static void deleteOrder(int orderId) {
+        List<OrderItem> orderItems = OrderItem.getAllOrderItemsByOrderId(orderId);
+        for (OrderItem orderItem : orderItems) {
+            OrderItem.deleteOrderItem(orderId, orderItem.getMenuItem().getMenuItemId());
+        }
+
+        String query = "DELETE FROM orders WHERE order_id = ?";
+        try (Connection connection = Connect.getInstance().getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, orderId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting order", e);
+        }
+    }
+
+    public static List<Order> getOrdersByCustomerId(int customerId) {
+        List<Order> orders = new ArrayList<>();
+        List<OrderItem> orderItems = new ArrayList<>();
+        double total = 0;
+        String query = "SELECT * FROM orders WHERE user_id = ?";
+        try (Connection connection = Connect.getInstance().getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, customerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.orderId = resultSet.getInt("order_id");
+                order.orderUser = User.getUserById(resultSet.getInt("user_id"));
+                order.orderStatus = resultSet.getString("order_status");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                order.orderDate = sdf.format(resultSet.getDate("order_date"));
+                orders.add(order);
+            }
+            resultSet.close();
+            for (Order order : orders) {
+                orderItems = OrderItem.getAllOrderItemsByOrderId(order.getOrderId());
+                for (OrderItem orderItem : orderItems) {
+                    total += orderItem.getMenuItem().getMenuItemPrice() * orderItem.getQuantity();
+                }
+                order.setOrderItems(orderItems);
+                order.setOrderTotal(total);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting orders", e);
+        }
+        return orders;
+    }
+
+    public static List<Order> getAllOrders() {
+        List<Order> orders = new ArrayList<>();
+        List<OrderItem> orderItems = new ArrayList<>();
+        double total = 0;
+        String query = "SELECT * FROM orders";
+        try (Connection connection = Connect.getInstance().getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.orderId = resultSet.getInt("order_id");
+                order.orderUser = User.getUserById(resultSet.getInt("user_id"));
+                order.orderStatus = resultSet.getString("order_status");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                order.orderDate = sdf.format(resultSet.getDate("order_date"));
+                orders.add(order);
+            }
+            resultSet.close();
+            for (Order order : orders) {
+                orderItems = OrderItem.getAllOrderItemsByOrderId(order.getOrderId());
+                for (OrderItem orderItem : orderItems) {
+                    total += orderItem.getMenuItem().getMenuItemPrice() * orderItem.getQuantity();
+                }
+                order.setOrderItems(orderItems);
+                order.setOrderTotal(total);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting orders", e);
+        }
+        return orders;
+    }
+
+    public static Order getOrderById(int orderId) {
+        Order order = new Order();
+        List<OrderItem> orderItems = new ArrayList<>();
+        double total = 0;
+        String query = "SELECT * FROM orders WHERE order_id = ?";
+        try (Connection connection = Connect.getInstance().getConnection();
+                PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, orderId);
+            ResultSet resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                order.orderId = resultSet.getInt("order_id");
+                order.orderUser = User.getUserById(resultSet.getInt("user_id"));
+                order.orderStatus = resultSet.getString("order_status");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                order.orderDate = sdf.format(resultSet.getDate("order_date"));
+            }
+            resultSet.close();
+            orderItems = OrderItem.getAllOrderItemsByOrderId(order.getOrderId());
+            for (OrderItem orderItem : orderItems) {
+                total += orderItem.getMenuItem().getMenuItemPrice() * orderItem.getQuantity();
+            }
+            order.setOrderItems(orderItems);
+            order.setOrderTotal(total);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting order", e);
+        }
+        return order;
     }
 }

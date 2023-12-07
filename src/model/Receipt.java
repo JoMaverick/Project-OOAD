@@ -2,8 +2,8 @@ package model;
 
 public class Receipt {
     private int receiptId;
-    private int receiptOrderId;
-    private int receiptPaymentAmount;
+    private Order receiptOrder;
+    private double receiptPaymentAmount;
     private String receiptPaymentDate;
     private String receiptPaymentType;
 
@@ -11,11 +11,11 @@ public class Receipt {
         return receiptId;
     }
 
-    public int getReceiptOrderId() {
-        return receiptOrderId;
+    public Order getReceiptOrder() {
+        return receiptOrder;
     }
 
-    public int getReceiptPaymentAmount() {
+    public double getReceiptPaymentAmount() {
         return receiptPaymentAmount;
     }
 
@@ -27,11 +27,11 @@ public class Receipt {
         return receiptPaymentType;
     }
 
-    public void setReceiptOrderId(int receiptOrderId) {
-        this.receiptOrderId = receiptOrderId;
+    public void setReceiptOrder(Order receiptOrder) {
+        this.receiptOrder = receiptOrder;
     }
 
-    public void setReceiptPaymentAmount(int receiptPaymentAmount) {
+    public void setReceiptPaymentAmount(double receiptPaymentAmount) {
         this.receiptPaymentAmount = receiptPaymentAmount;
     }
 

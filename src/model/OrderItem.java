@@ -10,15 +10,15 @@ import java.util.List;
 
 public class OrderItem {
     private int orderId;
-    private int menuItemId;
+    private MenuItem menuItem;
     private int quantity;
 
     public int getOrderId() {
         return orderId;
     }
 
-    public int getMenuItemId() {
-        return menuItemId;
+    public MenuItem getMenuItem() {
+        return menuItem;
     }
 
     public int getQuantity() {
@@ -29,20 +29,20 @@ public class OrderItem {
         this.orderId = orderId;
     }
 
-    public void setMenuItemId(int menuItemId) {
-        this.menuItemId = menuItemId;
+    public void setMenuItem(MenuItem menuItem) {
+        this.menuItem = menuItem;
     }
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public static void createOrderItem(int orderId, int menuItemId, int quantity) {
+    public static void createOrderItem(int orderId, MenuItem menuItem, int quantity) {
         String query = "INSERT INTO order_items (order_id, menuitem_id, order_item_quantity) VALUES (?, ?, ?)";
         try (Connection connection = Connect.getInstance().getConnection();
                 PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, orderId);
-            ps.setInt(2, menuItemId);
+            ps.setInt(2, menuItem.getMenuItemId());
             ps.setInt(3, quantity);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -50,13 +50,13 @@ public class OrderItem {
         }
     }
 
-    public static void updateOrderItem(int orderId, int menuItemId, int quantity) {
+    public static void updateOrderItem(int orderId, MenuItem menuItem, int quantity) {
         String query = "UPDATE order_items SET order_item_quantity = ? WHERE order_id = ? AND menuitem_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
                 PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, quantity);
             ps.setInt(2, orderId);
-            ps.setInt(3, menuItemId);
+            ps.setInt(3, menuItem.getMenuItemId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating order item", e);
@@ -85,10 +85,11 @@ public class OrderItem {
             while (rs.next()) {
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrderId(rs.getInt("order_id"));
-                orderItem.setMenuItemId(rs.getInt("menuitem_id"));
+                orderItem.setMenuItem(MenuItem.getMenuItemById(rs.getInt("menuitem_id")));
                 orderItem.setQuantity(rs.getInt("order_item_quantity"));
                 orderItems.add(orderItem);
             }
+            rs.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error getting order items", e);
         }

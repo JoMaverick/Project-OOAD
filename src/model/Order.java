@@ -164,11 +164,11 @@ public class Order {
 
             while (resultSet.next()) {
                 Order order = new Order();
-                order.orderId = resultSet.getInt("order_id");
-                order.orderUser = User.getUserById(resultSet.getInt("user_id"));
-                order.orderStatus = resultSet.getString("order_status");
+                order.setOrderId(resultSet.getInt("order_id"));
+                order.setOrderUser(User.getUserById(resultSet.getInt("user_id")));
+                order.setOrderStatus(resultSet.getString("order_status"));
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                order.orderDate = sdf.format(resultSet.getDate("order_date"));
+                order.setOrderDate(sdf.format(resultSet.getDate("order_date")));
                 orders.add(order);
             }
             resultSet.close();
@@ -197,11 +197,11 @@ public class Order {
 
             while (resultSet.next()) {
                 Order order = new Order();
-                order.orderId = resultSet.getInt("order_id");
-                order.orderUser = User.getUserById(resultSet.getInt("user_id"));
-                order.orderStatus = resultSet.getString("order_status");
+                order.setOrderId(resultSet.getInt("order_id"));
+                order.setOrderUser(User.getUserById(resultSet.getInt("user_id")));
+                order.setOrderStatus(resultSet.getString("order_status"));
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                order.orderDate = sdf.format(resultSet.getDate("order_date"));
+                order.setOrderDate(sdf.format(resultSet.getDate("order_date")));
                 orders.add(order);
             }
             resultSet.close();
@@ -230,11 +230,11 @@ public class Order {
             ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-                order.orderId = resultSet.getInt("order_id");
-                order.orderUser = User.getUserById(resultSet.getInt("user_id"));
-                order.orderStatus = resultSet.getString("order_status");
+                order.setOrderId(resultSet.getInt("order_id"));
+                order.setOrderUser(User.getUserById(resultSet.getInt("user_id")));
+                order.setOrderStatus(resultSet.getString("order_status"));
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                order.orderDate = sdf.format(resultSet.getDate("order_date"));
+                order.setOrderDate(sdf.format(resultSet.getDate("order_date")));
             }
             resultSet.close();
             orderItems = OrderItem.getAllOrderItemsByOrderId(order.getOrderId());

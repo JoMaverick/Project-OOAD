@@ -6,9 +6,20 @@ import model.Order;
 import model.Receipt;
 
 public class ReceiptController {
-    public static void createReceipt(Order receiptOrder, String receiptPaymentType, double receiptPaymentAmount,
+    public static String createReceipt(Order receiptOrder, String receiptPaymentType, String receiptPaymentAmount,
             String receiptPaymentDate) {
-        Receipt.createReceipt(receiptOrder, receiptPaymentType, receiptPaymentAmount, receiptPaymentDate);
+        if (!receiptPaymentType.equals("Cash") && !receiptPaymentType.equals("Debit")
+                && !receiptPaymentType.equals("Credit")) {
+            return "Error: Payment type must be either Cash, Debit, or Credit.";
+        } else if (receiptPaymentAmount.isBlank()) {
+            return "Error: Payment amount must be filled.";
+        } else if (Double.parseDouble(receiptPaymentAmount) < receiptOrder.getOrderTotal()) {
+            return "Error: Payment amount must be greater or equal than total order price.";
+        } else {
+            Receipt.createReceipt(receiptOrder, receiptPaymentType, Double.parseDouble(receiptPaymentAmount),
+                    receiptPaymentDate);
+            return "Create receipt sucess.";
+        }
     }
 
     public static void updateReceipt(int orderId, String receiptPaymentType, double receiptPaymentAmount,

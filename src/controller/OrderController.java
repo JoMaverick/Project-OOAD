@@ -11,12 +11,26 @@ public class OrderController {
         Order.createOrder(orderUser, orderItems, orderDate);
     }
 
-    public static String updateOrder(int orderId, List<OrderItem> orderItems, String orderStatus) {
-        return Order.updateOrder(orderId, orderItems, orderStatus);
+    public static String updateOrder(String orderId, List<OrderItem> orderItems, String orderStatus) {
+        if (orderId.isBlank()) {
+            return "Error: Order ID cannot be empty.";
+        }
+
+        String message = Order.updateOrder(Integer.parseInt(orderId), orderItems, orderStatus);
+        if (message.equals("Update order sucess.")) {
+            return orderStatus;
+        } else {
+            return message;
+        }
     }
 
-    public static void deleteOrder(int orderId) {
-        Order.deleteOrder(orderId);
+    public static String deleteOrder(String orderId) {
+        if (orderId.isBlank()) {
+            return "Error: Order must be chosen.";
+        } else {
+            Order.deleteOrder(Integer.parseInt(orderId));
+            return "Delete order sucess.";
+        }
     }
 
     public static List<Order> getOrdersByCustomerId(int customerId) {

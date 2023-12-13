@@ -100,23 +100,16 @@ public class Order {
     }
 
     public static String updateOrder(int orderId, List<OrderItem> orderItems, String orderStatus) {
-        boolean orderIdExist = false;
-        String query2 = "SELECT order_id FROM orders";
-        try (Connection connection = Connect.getInstance().getConnection();
-                PreparedStatement ps = connection.prepareStatement(query2)) {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                if (orderId == rs.getInt("order_id")) {
-                    orderIdExist = true;
-                }
+        boolean isOrderIdExist = false;
+        List<Order> orders = Order.getAllOrders();
+        for (Order order : orders) {
+            if (order.getOrderId() == orderId) {
+                isOrderIdExist = true;
             }
-            rs.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting order id", e);
         }
 
-        if (!orderIdExist) {
-            return "Update Order Failed";
+        if (!isOrderIdExist) {
+            return "Error: Order id not found.";
         } else {
             String query = "UPDATE orders SET order_status = ? WHERE order_id = ?";
             try (Connection connection = Connect.getInstance().getConnection();
@@ -132,7 +125,7 @@ public class Order {
                 OrderItem.updateOrderItem(orderId, orderItem.getMenuItem(), orderItem.getQuantity());
             }
 
-            return "Update Order Success";
+            return "Update order sucess.";
         }
     }
 

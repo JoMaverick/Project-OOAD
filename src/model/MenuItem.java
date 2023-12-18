@@ -14,11 +14,13 @@ public class MenuItem {
     private double menuItemPrice;
 
     public MenuItem(int menuItemId, String menuItemName, String menuItemDescription, double menuItemPrice) {
-        super();
         this.menuItemId = menuItemId;
         this.menuItemName = menuItemName;
         this.menuItemDescription = menuItemDescription;
         this.menuItemPrice = menuItemPrice;
+    }
+
+    public MenuItem() {
     }
 
     public int getMenuItemId() {

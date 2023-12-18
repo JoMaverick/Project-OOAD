@@ -22,6 +22,9 @@ public class User {
         this.userPassword = userPassword;
     }
 
+    public User() {
+    }
+
     public int getUserId() {
         return userId;
     }
@@ -74,7 +77,7 @@ public class User {
     }
 
     public static User getUserById(int userId) {
-    	User users;
+        User users;
         String query = "SELECT * FROM users WHERE user_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
                 PreparedStatement ps = connection.prepareStatement(query)) {

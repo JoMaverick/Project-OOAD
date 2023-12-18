@@ -77,7 +77,7 @@ public class OrderItem {
 
     public static List<OrderItem> getAllOrderItemsByOrderId(int orderId) {
         List<OrderItem> orderItems = new ArrayList<>();
-        String query = "SELECT * FROM order_items WHERE order_id = ?";
+        String query = "SELECT * FROM order_items AS oi JOIN menu_items AS mi ON oi.menuItem_id = mi.menuItem_id WHERE oi.order_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
                 PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, orderId);
@@ -85,7 +85,12 @@ public class OrderItem {
             while (rs.next()) {
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrderId(rs.getInt("order_id"));
-                orderItem.setMenuItem(MenuItem.getMenuItemById(rs.getInt("menuitem_id")));
+                MenuItem menuItem = new MenuItem();
+                menuItem.setMenuItemId(rs.getInt("menuitem_id"));
+                menuItem.setMenuItemName(rs.getString("menuitem_name"));
+                menuItem.setMenuItemPrice(rs.getDouble("menuitem_price"));
+                menuItem.setMenuItemDescription(rs.getString("menuitem_description"));
+                orderItem.setMenuItem(menuItem);
                 orderItem.setQuantity(rs.getInt("order_item_quantity"));
                 orderItems.add(orderItem);
             }

@@ -158,6 +158,9 @@ public class Receipt {
 
     public static Receipt getReceiptById(int receiptId) {
         Receipt receipt = new Receipt();
+        Order order = new Order();
+        List<OrderItem> orderItems = new ArrayList<>();
+        double total = 0;
         String query = "SELECT * FROM receipts WHERE receipt_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
                 PreparedStatement ps = connection.prepareStatement(query)) {
@@ -175,15 +178,31 @@ public class Receipt {
             throw new RuntimeException("Error getting receipt", e);
         }
 
-        String query2 = "SELECT * FROM receipt_details WHERE receipt_id = ?";
+        String query2 = "SELECT * FROM receipt_details AS rd JOIN orders AS o ON rd.order_id = o.order_id JOIN users AS u ON o.user_id = u.user_id WHERE rd.receipt_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
                 PreparedStatement ps = connection.prepareStatement(query2)) {
             ps.setInt(1, receiptId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                receipt.setReceiptOrder(Order.getOrderById(rs.getInt("order_id")));
+                order.setOrderId(rs.getInt("order_id"));
+                order.setOrderStatus(rs.getString("order_status"));
+                order.setOrderDate(rs.getString("order_date"));
+                User user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setUserRole(rs.getString("user_role"));
+                user.setUserName(rs.getString("user_name"));
+                user.setUserEmail(rs.getString("user_email"));
+                user.setUserPassword(rs.getString("user_password"));
+                order.setOrderUser(user);
             }
             rs.close();
+            orderItems = OrderItem.getAllOrderItemsByOrderId(order.getOrderId());
+            for (OrderItem orderItem : orderItems) {
+                total += orderItem.getMenuItem().getMenuItemPrice() * orderItem.getQuantity();
+            }
+            order.setOrderItems(orderItems);
+            order.setOrderTotal(total);
+            receipt.setReceiptOrder(order);
         } catch (SQLException e) {
             throw new RuntimeException("Error getting receipt details", e);
         }
@@ -193,6 +212,9 @@ public class Receipt {
 
     public static List<Receipt> getAllReceipts() {
         List<Receipt> receipts = new ArrayList<>();
+        Order order = new Order();
+        List<OrderItem> orderItems = new ArrayList<>();
+        double total = 0;
         String query = "SELECT * FROM receipts";
         try (Connection connection = Connect.getInstance().getConnection();
                 Statement statement = connection.createStatement();
@@ -213,15 +235,31 @@ public class Receipt {
         }
 
         for (Receipt receipt : receipts) {
-            String query2 = "SELECT * FROM receipt_details WHERE receipt_id = ?";
+            String query2 = "SELECT * FROM receipt_details AS rd JOIN orders AS o ON rd.order_id = o.order_id JOIN users AS u ON o.user_id = u.user_id WHERE rd.receipt_id = ?";
             try (Connection connection = Connect.getInstance().getConnection();
                     PreparedStatement ps = connection.prepareStatement(query2)) {
                 ps.setInt(1, receipt.getReceiptId());
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
-                    receipt.setReceiptOrder(Order.getOrderById(rs.getInt("order_id")));
+                    order.setOrderId(rs.getInt("order_id"));
+                    order.setOrderStatus(rs.getString("order_status"));
+                    order.setOrderDate(rs.getString("order_date"));
+                    User user = new User();
+                    user.setUserId(rs.getInt("user_id"));
+                    user.setUserRole(rs.getString("user_role"));
+                    user.setUserName(rs.getString("user_name"));
+                    user.setUserEmail(rs.getString("user_email"));
+                    user.setUserPassword(rs.getString("user_password"));
+                    order.setOrderUser(user);
                 }
                 rs.close();
+                orderItems = OrderItem.getAllOrderItemsByOrderId(order.getOrderId());
+                for (OrderItem orderItem : orderItems) {
+                    total += orderItem.getMenuItem().getMenuItemPrice() * orderItem.getQuantity();
+                }
+                order.setOrderItems(orderItems);
+                order.setOrderTotal(total);
+                receipt.setReceiptOrder(order);
             } catch (SQLException e) {
                 throw new RuntimeException("Error getting receipt details", e);
             }

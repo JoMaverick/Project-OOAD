@@ -149,7 +149,7 @@ public class Order {
         List<Order> orders = new ArrayList<>();
         List<OrderItem> orderItems = new ArrayList<>();
         double total = 0;
-        String query = "SELECT * FROM orders WHERE user_id = ?";
+        String query = "SELECT * FROM orders AS o JOIN users AS u ON o.user_id = u.user_id JOIN order_items AS oi ON oi.order_id = o.order_id WHERE o.user_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, customerId);
@@ -158,7 +158,13 @@ public class Order {
             while (resultSet.next()) {
                 Order order = new Order();
                 order.setOrderId(resultSet.getInt("order_id"));
-                order.setOrderUser(User.getUserById(resultSet.getInt("user_id")));
+                User orderUser = new User();
+                orderUser.setUserId(resultSet.getInt("user_id"));
+                orderUser.setUserRole(resultSet.getString("user_role"));
+                orderUser.setUserName(resultSet.getString("user_name"));
+                orderUser.setUserEmail(resultSet.getString("user_email"));
+                orderUser.setUserPassword(resultSet.getString("user_password"));
+                order.setOrderUser(orderUser);
                 order.setOrderStatus(resultSet.getString("order_status"));
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 order.setOrderDate(sdf.format(resultSet.getDate("order_date")));
@@ -183,7 +189,7 @@ public class Order {
         List<Order> orders = new ArrayList<>();
         List<OrderItem> orderItems = new ArrayList<>();
         double total = 0;
-        String query = "SELECT * FROM orders";
+        String query = "SELECT * FROM orders AS o JOIN users AS u ON o.user_id = u.user_id JOIN order_items AS oi ON oi.order_id = o.order_id";
         try (Connection connection = Connect.getInstance().getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(query)) {
@@ -191,7 +197,13 @@ public class Order {
             while (resultSet.next()) {
                 Order order = new Order();
                 order.setOrderId(resultSet.getInt("order_id"));
-                order.setOrderUser(User.getUserById(resultSet.getInt("user_id")));
+                User orderUser = new User();
+                orderUser.setUserId(resultSet.getInt("user_id"));
+                orderUser.setUserRole(resultSet.getString("user_role"));
+                orderUser.setUserName(resultSet.getString("user_name"));
+                orderUser.setUserEmail(resultSet.getString("user_email"));
+                orderUser.setUserPassword(resultSet.getString("user_password"));
+                order.setOrderUser(orderUser);
                 order.setOrderStatus(resultSet.getString("order_status"));
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 order.setOrderDate(sdf.format(resultSet.getDate("order_date")));
@@ -216,7 +228,7 @@ public class Order {
         Order order = new Order();
         List<OrderItem> orderItems = new ArrayList<>();
         double total = 0;
-        String query = "SELECT * FROM orders WHERE order_id = ?";
+        String query = "SELECT * FROM orders AS o JOIN users AS u ON o.user_id = u.user_id JOIN order_items AS oi ON oi.order_id = o.order_id WHERE o.order_id = ?";
         try (Connection connection = Connect.getInstance().getConnection();
                 PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, orderId);
@@ -224,7 +236,13 @@ public class Order {
 
             while (resultSet.next()) {
                 order.setOrderId(resultSet.getInt("order_id"));
-                order.setOrderUser(User.getUserById(resultSet.getInt("user_id")));
+                User orderUser = new User();
+                orderUser.setUserId(resultSet.getInt("user_id"));
+                orderUser.setUserRole(resultSet.getString("user_role"));
+                orderUser.setUserName(resultSet.getString("user_name"));
+                orderUser.setUserEmail(resultSet.getString("user_email"));
+                orderUser.setUserPassword(resultSet.getString("user_password"));
+                order.setOrderUser(orderUser);
                 order.setOrderStatus(resultSet.getString("order_status"));
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 order.setOrderDate(sdf.format(resultSet.getDate("order_date")));

@@ -6,6 +6,8 @@ import controller.MenuItemController;
 import controller.UserController;
 import model.MenuItem;
 import model.User;
+import model.OrderItem;
+import controller.*;
 
 public class test {
 
@@ -44,7 +46,15 @@ public class test {
 		
 		// System.out.println(UserController.AuthenticateUserController("dan@abc.com", "pass1"));
 		
-
+//		MenuItemController.createMenuItemController("jojo", "desc123456789", 1000);
+//		MenuItemController.createMenuItemController("jaja", "desc123456789", 1000);
+//		MenuItemController.createMenuItemController("juju", "desc123456789", 1000);
+//		MenuItemController.createMenuItemController("jiji", "desc123456789", 1000);
+		
+//		UserController.createUserController("lili", "lili@abc.com", "pass123", "pass123");
+//		UserController.createUserController("lala", "lala@abc.com", "pass123", "pass123");
+//		UserController.createUserController("lulu", "lulu@abc.com", "pass123", "pass123");
+//		UserController.createUserController("lele", "lele@abc.com", "pass123", "pass123");
 	}
 
 }
